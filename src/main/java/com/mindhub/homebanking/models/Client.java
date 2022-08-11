@@ -8,8 +8,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+import java.util.List;
 import java.util.Set;
 import java.util.HashSet;
+
+import static java.util.stream.Collectors.toList;
 
 @Entity
 
@@ -26,6 +29,9 @@ public class Client {
     @OneToMany(mappedBy="client", fetch=FetchType.EAGER)
     Set<Account> accounts = new HashSet<>();
 
+    @OneToMany(mappedBy="client", fetch=FetchType.EAGER)
+    Set<ClientLoan> clientLoans = new HashSet<>();
+
     public Client() {
     }
 
@@ -34,7 +40,6 @@ public class Client {
         this.lastName = lastName;
         this.email = email;
     }
-
 
     public Set<Account> getAccounts() {
         return accounts;
@@ -47,6 +52,10 @@ public class Client {
         account.setClient(this);
         accounts.add(account);
     }
+
+    public Set<ClientLoan> getClientLoans(){return clientLoans;}
+    public void setClientLoans(Set<ClientLoan>clientLoans){this.clientLoans = clientLoans;}
+
 
     public String getFirstName() {
         return firstName;
@@ -75,6 +84,8 @@ public class Client {
         this.email = email;
     }
 
+    public List<Loan> getLoans() {return clientLoans.stream().map(clientLoan -> clientLoan.getLoan()).collect(toList());}
+
     @Override
     public String toString() {
         return "Client{" +
@@ -85,5 +96,6 @@ public class Client {
                 ", accounts=" + accounts +
                 '}';
     }
+
 
 }
