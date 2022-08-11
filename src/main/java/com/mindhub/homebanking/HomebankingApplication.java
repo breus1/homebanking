@@ -1,12 +1,7 @@
 package com.mindhub.homebanking;
 
-import com.mindhub.homebanking.models.Account;
-import com.mindhub.homebanking.models.Client;
-import com.mindhub.homebanking.models.Transaction;
-import com.mindhub.homebanking.models.TransactionType;
-import com.mindhub.homebanking.repositories.AccountRepository;
-import com.mindhub.homebanking.repositories.ClientRepository;
-import com.mindhub.homebanking.repositories.TransactionRepository;
+import com.mindhub.homebanking.models.*;
+import com.mindhub.homebanking.repositories.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -14,7 +9,10 @@ import org.springframework.context.annotation.Bean;
 import java.time.LocalDateTime;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 @SpringBootApplication
 public class HomebankingApplication {
@@ -26,7 +24,7 @@ public class HomebankingApplication {
 
 	/*El bean hace que se puedan traer cosas de todos lados*/
 	@Bean
-	public CommandLineRunner InitData(ClientRepository clientRepository, AccountRepository accountRepository, TransactionRepository transactionRepository)
+	public CommandLineRunner InitData(ClientRepository clientRepository, AccountRepository accountRepository, TransactionRepository transactionRepository, LoanRepository loanRepository, ClientLoanRepository clientLoanRepository)
 	{
 		return (args) ->
 		{
@@ -40,18 +38,14 @@ public class HomebankingApplication {
 			Account account3 = new Account("VIN003", 10000,  LocalDateTime.now());
 			Account account4 = new Account("VIN004",30000,  LocalDateTime.now());
 
-			client1.addAccount(account1);
-			client1.addAccount(account2);
+			Loan loan1 = new Loan("Hipotecario",500000, Arrays.asList(12,24,36,48,60));
+			Loan loan2 = new Loan("Personal",100000,Arrays.asList(6,12,24));
+			Loan loan3 = new Loan("Automotriz",300000,Arrays.asList(6,12,24,36));
 
-			client2.addAccount(account3);
-			client2.addAccount(account4);
-
-			clientRepository.save(client1);
-			clientRepository.save(client2);
-			accountRepository.save(account1);
-			accountRepository.save(account2);
-			accountRepository.save(account3);
-			accountRepository.save(account4);
+			ClientLoan clientLoan1 = new ClientLoan(400000, 60, client1, loan1);
+			ClientLoan clientLoan2 = new ClientLoan(50000, 12, client1, loan2);
+			ClientLoan clientLoan3 = new ClientLoan(100000, 24, client2, loan2);
+			ClientLoan clientLoan4 = new ClientLoan(200000, 36, client2, loan3);
 
 			Transaction transaction1 = new Transaction(TransactionType.CREDIT, 2000, "transferencia recibida" ,LocalDateTime.now(), account1);
 			Transaction transaction2 = new Transaction(TransactionType.DEBIT, -4000, "Compra tienda xx" ,LocalDateTime.now(), account1);
@@ -61,6 +55,23 @@ public class HomebankingApplication {
 			Transaction transaction6 = new Transaction(TransactionType.DEBIT, -2000, "Compra tienda xz" ,LocalDateTime.now(), account3);
 			Transaction transaction7 = new Transaction(TransactionType.CREDIT, 700, "transferencia recibida" ,LocalDateTime.now(), account4);
 			Transaction transaction8 = new Transaction(TransactionType.DEBIT, -2000, "Compra tienda xi" ,LocalDateTime.now(), account4);
+
+
+			client1.addAccount(account1);
+			client1.addAccount(account2);
+
+			client2.addAccount(account3);
+			client2.addAccount(account4);
+
+
+			clientRepository.save(client1);
+			clientRepository.save(client2);
+
+			accountRepository.save(account1);
+			accountRepository.save(account2);
+			accountRepository.save(account3);
+			accountRepository.save(account4);
+
 			transactionRepository.save(transaction1);
 			transactionRepository.save(transaction2);
 			transactionRepository.save(transaction3);
@@ -69,6 +80,15 @@ public class HomebankingApplication {
 			transactionRepository.save(transaction6);
 			transactionRepository.save(transaction7);
 			transactionRepository.save(transaction8);
+
+			loanRepository.save(loan1);
+			loanRepository.save(loan2);
+			loanRepository.save(loan3);
+
+			clientLoanRepository.save(clientLoan1);
+			clientLoanRepository.save(clientLoan2);
+			clientLoanRepository.save(clientLoan3);
+			clientLoanRepository.save(clientLoan4);
 
 		};
 	}
