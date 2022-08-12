@@ -1,10 +1,10 @@
 package com.mindhub.homebanking.models;
 
+import com.mindhub.homebanking.enums.TransactionType;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.Objects;
 
 @Entity
 public class Transaction {
