@@ -6,5 +6,5 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 @RepositoryRestResource //que puede usar "rest" -> generacion de rutas
 public interface ClientRepository extends JpaRepository<Client, Long> {
-
+public Client findByEmail(String email);
 }
