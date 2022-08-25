@@ -38,12 +38,19 @@ public class AccountController {
         return this.accountRepository.findById(id).map(AccountDTO::new).orElse(null);
     }
 
+    @RequestMapping("/clients/current/accounts")
+    public List<AccountDTO> getAccounts(Authentication authentication)
+    {
+        Client client = this.clientRepository.findByEmail(authentication.getName());
+        return client.getAccounts().stream().map(AccountDTO::new).collect(Collectors.toList());
+    }
+
     @RequestMapping(path = "/clients/current/accounts", method = RequestMethod.POST)
     public ResponseEntity<Object> createAccount(Authentication authentication){
         Client client = this.clientRepository.findByEmail(authentication.getName());
 
         if (client.getAccounts().size() >= 3){
-            return new ResponseEntity<>("Se sobrepaso del limite de cuentas, lo lamentamos", HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>("Client's of accounts limit reached", HttpStatus.FORBIDDEN);
         }
         accountRepository.save(new Account(AccountUtils.getAccountNumber(10000000, 99999999, accountRepository),0 , LocalDateTime.now(),client));
         return new ResponseEntity<>(HttpStatus.CREATED);
