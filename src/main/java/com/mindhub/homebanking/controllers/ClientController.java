@@ -2,6 +2,7 @@ package com.mindhub.homebanking.controllers;
 
 import com.mindhub.homebanking.Utils.AccountUtils;
 import com.mindhub.homebanking.dtos.ClientDTO;
+import com.mindhub.homebanking.enums.AccountType;
 import com.mindhub.homebanking.models.Account;
 import com.mindhub.homebanking.models.Client;
 import com.mindhub.homebanking.repositories.AccountRepository;
@@ -31,26 +32,26 @@ public class ClientController
     @Autowired
     private ClientRepository clientRepository;
 
-    @RequestMapping("/clients")
+    @GetMapping("/clients")
     public Set<ClientDTO> getClients(){
         return clientRepository.findAll().stream().map(client -> new ClientDTO(client)).collect(Collectors.toSet());
     }
 
-    @RequestMapping("/clients/{id}")
+    @GetMapping("/clients/{id}")
     public ClientDTO getClient(@PathVariable Long id){
         return clientRepository.findById(id).map(ClientDTO::new).orElse(null);
     }
 
-    @RequestMapping("/clients/current")
+    @GetMapping("/clients/current")
     public ClientDTO getClient(Authentication authentication){
         Client client = this.clientRepository.findByEmail(authentication.getName());
         return new ClientDTO(client);
     }
 
-    @RequestMapping(path = "/clients", method = RequestMethod.POST)
+    @PostMapping("/clients")
 
     public ResponseEntity<Object> createClient(@RequestParam String firstName, @RequestParam String lastName,
-                                               @RequestParam String email, @RequestParam String password) {
+                                               @RequestParam String email, @RequestParam String password, @RequestParam AccountType type) {
 
 
 
@@ -64,7 +65,7 @@ public class ClientController
 
         Client client = new Client(firstName, lastName, email, passwordEncoder.encode(password));
         clientRepository.save(client);
-        accountRepository.save(new Account(AccountUtils.getAccountNumber(0, 99999999, accountRepository),0 , LocalDateTime.now(),client));
+        accountRepository.save(new Account(AccountUtils.getAccountNumber(accountRepository),0 , LocalDateTime.now(),client, type));
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
