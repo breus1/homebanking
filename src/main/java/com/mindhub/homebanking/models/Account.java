@@ -30,10 +30,14 @@ public class Account {
 
 //--------------------------------
 
-    public Account(Client client) {
-        this.client = client;
-    }
     public Account() {
+    }
+
+    public Account(String number, double balance, LocalDateTime creationDate, Client client) {
+        this.number = number;
+        this.balance = balance;
+        this.creationDate = creationDate;
+        this.client = client;
     }
 
     public Account(String number, double balance, LocalDateTime creationDate) {

@@ -2,6 +2,8 @@ var app = new Vue({
     el:"#app",
     data:{
         clientInfo: {},
+        creditCards: [],
+        debitCards: [],
         errorToats: null,
         errorMsg: null,
     },
@@ -11,9 +13,10 @@ var app = new Vue({
             .then((response) => {
                 //get client ifo
                 this.clientInfo = response.data;
+                this.creditCards = this.clientInfo.cards.filter(card => card.type == "CREDIT");
+                this.debitCards = this.clientInfo.cards.filter(card => card.type == "DEBIT");
             })
-            .catch((error)=>{
-                // handle error
+            .catch((error) => {
                 this.errorMsg = "Error getting data";
                 this.errorToats.show();
             })
@@ -29,14 +32,6 @@ var app = new Vue({
                 this.errorToats.show();
             })
         },
-        create: function(){
-            axios.post('http://localhost:8080/api/clients/current/accounts')
-            .then(response => window.location.reload())
-            .catch((error) =>{
-                this.errorMsg = error.response.data;  
-                this.errorToats.show();
-            })
-        }
     },
     mounted: function(){
         this.errorToats = new bootstrap.Toast(document.getElementById('danger-toast'));
