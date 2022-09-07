@@ -26,19 +26,25 @@ public class Client {
     private String lastName;
     private String email;
 
+    private String password;
+
     @OneToMany(mappedBy="client", fetch=FetchType.EAGER)
     Set<Account> accounts = new HashSet<>();
 
     @OneToMany(mappedBy="client", fetch=FetchType.EAGER)
     Set<ClientLoan> clientLoans = new HashSet<>();
 
+    @OneToMany(mappedBy="client", fetch=FetchType.EAGER)
+    Set<Card> cards = new HashSet<>();
+
     public Client() {
     }
 
-    public Client(String firstName, String lastName, String email) {
+    public Client(String firstName, String lastName, String email, String password) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
+        this.password = password;
     }
 
     public Set<Account> getAccounts() {
@@ -56,6 +62,12 @@ public class Client {
     public Set<ClientLoan> getClientLoans(){return clientLoans;}
     public void setClientLoans(Set<ClientLoan>clientLoans){this.clientLoans = clientLoans;}
 
+    public Set<Card> getCards() {
+        return cards;
+    }
+    public void setCards(Set<Card>cards){
+        this.cards = cards;
+    }
 
     public String getFirstName() {
         return firstName;
@@ -85,6 +97,14 @@ public class Client {
     }
 
     public List<Loan> getLoans() {return clientLoans.stream().map(clientLoan -> clientLoan.getLoan()).collect(toList());}
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
     @Override
     public String toString() {
