@@ -2,6 +2,7 @@ package com.mindhub.homebanking;
 
 import com.mindhub.homebanking.enums.CardColor;
 import com.mindhub.homebanking.enums.CardType;
+import com.mindhub.homebanking.enums.AccountType;
 import com.mindhub.homebanking.enums.TransactionType;
 import com.mindhub.homebanking.models.*;
 import com.mindhub.homebanking.repositories.*;
@@ -34,17 +35,17 @@ public class HomebankingApplication {
 		{
 			Client client1 = new Client("Melba", "Lorenzo", "melba@mindhub.com", passwordEncoder.encode("732"));
 
-			Account account1 = new Account("VIN001", 5000,  LocalDateTime.now());
-			Account account2 = new Account("VIN002",7500,  LocalDateTime.now().plusDays(1));
+			Account account1 = new Account("VIN-001", 5000,  LocalDateTime.now(), AccountType.AHORRO);
+			Account account2 = new Account("VIN-002",7500,  LocalDateTime.now().plusDays(1), AccountType.CORRIENTE);
 
 			Client client2 = new Client("Bruno", "Reus", "brunoreus04@gmail.com",passwordEncoder.encode("247"));
 
-			Account account3 = new Account("VIN003", 10000,  LocalDateTime.now());
-			Account account4 = new Account("VIN004",30000,  LocalDateTime.now());
+			Account account3 = new Account("VIN-003", 10000,  LocalDateTime.now(), AccountType.AHORRO);
+			Account account4 = new Account("VIN-004",30000,  LocalDateTime.now(), AccountType.CORRIENTE);
 
-			Loan loan1 = new Loan("Hipotecario",500000, Arrays.asList(12,24,36,48,60));
-			Loan loan2 = new Loan("Personal",100000,Arrays.asList(6,12,24));
-			Loan loan3 = new Loan("Automotriz",300000,Arrays.asList(6,12,24,36));
+			Loan loan1 = new Loan("Hipotecario",500000, Arrays.asList(12,24,36,48,60),20);
+			Loan loan2 = new Loan("Personal",100000,Arrays.asList(6,12,24),10);
+			Loan loan3 = new Loan("Automotriz",300000,Arrays.asList(6,12,24,36),30);
 
 			ClientLoan clientLoan1 = new ClientLoan(400000, 60, client1, loan1);
 			ClientLoan clientLoan2 = new ClientLoan(50000, 12, client1, loan2);

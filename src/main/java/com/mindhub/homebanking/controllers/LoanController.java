@@ -34,13 +34,13 @@ public class LoanController {
     private TransactionRepository transactionRepository;
 
 
-    @RequestMapping(path = "/loans",method = RequestMethod.GET)
+    @GetMapping("/loans")
     public List<LoanDTO> getAllLoans(){
         return loanRepository.findAll().stream().map(LoanDTO::new).collect(Collectors.toList());
     }
 
     @Transactional
-    @RequestMapping(path = "/loans",method = RequestMethod.POST)
+    @PostMapping("/loans")
     public ResponseEntity<Object> applyingForLoans(@RequestBody LoanApplicationDTO loanApplicationDTO, Authentication authentication)
     {
         Loan loan = this.loanRepository.findById(loanApplicationDTO.getLoanId());
@@ -77,7 +77,7 @@ public class LoanController {
             return new ResponseEntity<>("The account you select doesn't belong a authenticated client", HttpStatus.FORBIDDEN);
         }
 
-        double interest = loanApplicationDTO.getAmount() * 0.2 + loanApplicationDTO.getAmount();
+        double interest = loan.getInterest() * loanApplicationDTO.getAmount()/100 + loanApplicationDTO.getAmount();
 
         ClientLoan clientLoan = new ClientLoan(interest, loanApplicationDTO.getPayments(), client, loan);
         clientLoanRepository.save(clientLoan);

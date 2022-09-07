@@ -12,7 +12,9 @@ public final class CardUtils {
     @Autowired
     private CardRepository cardRepository;
 
-    public static String getCardNumber(int min, int max, CardRepository cardRepository){
+    public static String getCardNumber(CardRepository cardRepository){
+        int min = 1000;
+        int max = 9999;
         String number = (int) ((Math.random()* (max - min)) + min) + "-" +
                         (int) ((Math.random()* (max - min)) + min) + "-" +
                         (int) ((Math.random()* (max - min)) + min) + "-" +
@@ -27,7 +29,9 @@ public final class CardUtils {
         return number;
     }
 
-    public static int getCVVNumber(int min, int max){
+    public static int getCVVNumber(){
+        int min = 100;
+        int max = 999;
         return (int) ((Math.random() * (max - min)) + min);
     }
 }

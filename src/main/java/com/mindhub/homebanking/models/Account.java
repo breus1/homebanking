@@ -1,5 +1,6 @@
 package com.mindhub.homebanking.models;
 
+import com.mindhub.homebanking.enums.AccountType;
 import net.minidev.json.annotate.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -20,6 +21,7 @@ public class Account {
     private String number;
     private double balance;
     private LocalDateTime creationDate;
+    private AccountType type;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="client_id")
@@ -33,17 +35,19 @@ public class Account {
     public Account() {
     }
 
-    public Account(String number, double balance, LocalDateTime creationDate, Client client) {
+    public Account(String number, double balance, LocalDateTime creationDate, Client client, AccountType type) {
         this.number = number;
         this.balance = balance;
         this.creationDate = creationDate;
         this.client = client;
+        this.type = type;
     }
 
-    public Account(String number, double balance, LocalDateTime creationDate) {
+    public Account(String number, double balance, LocalDateTime creationDate, AccountType type) {
         this.number = number;
         this.balance = balance;
         this.creationDate = creationDate;
+        this.type = type;
     }
 
 //-------------------------------
@@ -87,4 +91,11 @@ public class Account {
         this.creationDate = creationDate;
     }
 
+    public AccountType getType() {
+        return type;
+    }
+
+    public void setType(AccountType type) {
+        this.type = type;
+    }
 }
