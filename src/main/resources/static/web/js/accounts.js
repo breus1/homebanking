@@ -39,6 +39,7 @@ var app = new Vue({
                 this.errorToats.show();
             })
         },
+
         create: function(){
             axios.post('/api/clients/current/accounts',"type=CORRIENTE")
             .then(response =>
